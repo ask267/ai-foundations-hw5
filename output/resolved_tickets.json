@@ -1,0 +1,80 @@
+{
+  "run_date": "2026-10-12",
+  "shop_date": "2026-08-31",
+  "database": "data/campus_customs_new.db (reset from data/campus_customs.db before the run)",
+  "model": "gpt-6-luna (Portkey, cache bypassed)",
+  "checking": {
+    "start": 3400.0,
+    "end": 160.0,
+    "end_matches_cash_accounts": true
+  },
+  "tickets": [
+    {
+      "id": 101,
+      "type": "customer_order",
+      "requester": "Tauhid Zaman",
+      "final_status": "resolved",
+      "outcome": "Size S of CC-TEE-WHITE is out of stock (0 of 1). The overdue $840.00 reprint invoice 501 to Bulldog Print Co was prepared by Accounting and paid after human approval, so size S is expected around 2026-09-05 (not guaranteed). A reply to Tauhid offering M (5), L (3) or XL (2), or waiting for S, is drafted for a human to send.",
+      "runs": [
+        { "run_id": "616363760829", "status_after": "waiting", "seconds": 66.2, "total_tokens": 67624, "delegations": 4 },
+        { "run_id": "3453b03e615b", "status_after": "waiting", "seconds": 26.1, "total_tokens": 28180, "delegations": 2 },
+        { "run_id": "18883d273587", "status_after": "resolved", "seconds": 18.7, "total_tokens": 27250, "delegations": 2 }
+      ],
+      "agents": {
+        "Boss": "Called Inventory first; asked Accounting to prepare invoice 501 (not ticket-resolving) and CustomerService to draft the reply; set waiting in runs 1-2 and resolved in run 3. Tools: get_ticket, get_shop_date, get_cash_balance, list_payment_requests, update_ticket.",
+        "Inventory": "check_stock(CC-TEE-WHITE, S, 1): 0 on hand, short 1; alternatives M 5 / L 3 / XL 2; get_invoice(501): open, 3 days overdue, ETA 2026-09-05 if paid. Worked twice in run 1 (for the Boss and for CustomerService).",
+        "Accounting": "Verified invoice 501 ($840.00, Bulldog Print Co, open), checked for duplicates and cash, then prepare_payment(invoice, 501, 840.00) -> request #1, resolves_ticket=false.",
+        "CustomerService": "Asked Inventory to re-check stock, then drafted the reply to Tauhid without promising a firm date.",
+        "Facilities": "Not called."
+      },
+      "human_approvals": [
+        { "request_id": 1, "payment_id": 1, "kind": "invoice", "ref": "invoice 501 (Bulldog Print Co)", "amount": 840.0, "approved_by": "Archita", "balance_after": 2560.0 }
+      ],
+      "customer_draft": "Hi Tauhid, size S is currently out of stock. We do have the tee in sizes M, L, and XL if you'd like one of those instead. A reprint of size S is underway, with an estimated arrival of 2026-09-05; that date isn't guaranteed. Reply to let us know whether you'd prefer an available size or to wait for size S.",
+      "left_for_humans": ["Send the drafted reply to Tauhid and get their size preference."],
+      "note": "The Boss chose 'waiting' in runs 1 and 2 (waiting on owner approval, then on the customer's choice). The Boss prompt was clarified so that waiting on a customer or the owner counts as a human step (status resolved, step listed in needs_human); run 3 resolved the ticket."
+    },
+    {
+      "id": 102,
+      "type": "rent_notice",
+      "requester": "Elm City Properties",
+      "final_status": "resolved",
+      "outcome": "Facilities verified the emailed rent notice against lease 1 (same landlord, $2,400.00, due 2026-09-02 = 2 days from the shop date). Accounting prepared the exact rent payment; a human approved it, so the lease's next due date moved to 2026-10-02.",
+      "runs": [
+        { "run_id": "e0dcbdc7df0b", "status_after": "resolved", "seconds": 36.4, "total_tokens": 44917, "delegations": 2 }
+      ],
+      "agents": {
+        "Boss": "Called Facilities first (verify before paying), then Accounting; checked cash and pending requests; set resolved. Tools: get_ticket, get_shop_date, list_payment_requests, get_cash_balance, update_ticket.",
+        "Facilities": "get_ticket, get_rent_due(1): VERIFIED; requester matches the landlord, and 'due in 2 days' matches next_due 2026-09-02.",
+        "Accounting": "get_rent_due(1), list_payments, list_payment_requests x2, get_cash_balance, then prepare_payment(rent, 1, 2400.00, resolves_ticket=true) -> request #2; $160.00 left after approval.",
+        "Inventory": "Not called.",
+        "CustomerService": "Not called."
+      },
+      "human_approvals": [
+        { "request_id": 2, "payment_id": 2, "kind": "rent", "ref": "lease 1 (Elm City Properties)", "amount": 2400.0, "approved_by": "Archita", "balance_after": 160.0 }
+      ],
+      "customer_draft": null,
+      "left_for_humans": []
+    },
+    {
+      "id": 103,
+      "type": "price_override",
+      "requester": "Yale AI Club",
+      "final_status": "resolved",
+      "outcome": "Only 8 of the 20 requested CC-HOOD-NAVY size M are in stock (short 12). Accounting priced 15% off at $49.30 each (above the $22.00 cost and within the 15% limit that needs no owner approval); the Boss decided to propose it for the 8 in-stock units. A reply is drafted for a human to send. No money moved and no stock changed.",
+      "runs": [
+        { "run_id": "1e6407939380", "status_after": "resolved", "seconds": 103.0, "total_tokens": 81013, "delegations": 6 }
+      ],
+      "agents": {
+        "Boss": "Called Inventory first, then Accounting and CustomerService; when CustomerService asked for an approved price, it sent a follow-up decision to propose 15% for the 8 units; set resolved. Tools: get_ticket, update_ticket.",
+        "Inventory": "get_ticket, check_stock(CC-HOOD-NAVY, M, 20): 8 on hand, short 12; get_pricing: list price $58.00.",
+        "Accounting": "quote_discount at 15% (x3): $49.30 each, $986.00 for 20, not below cost, no owner approval needed. Told CustomerService (twice) that a calculated quote isn't an approved offer.",
+        "CustomerService": "Wouldn't quote a discount until it was approved (asked Accounting twice); then drafted the offer for the 8 size-M units.",
+        "Facilities": "Not called."
+      },
+      "human_approvals": [],
+      "customer_draft": "Hello Yale AI Club, thanks for reaching out! We currently have 8 size-M hoodies available, rather than the 20 requested. We can propose those 8 at $49.30 each. Would you like the 8 at that proposed price, or would you like us to check another size?",
+      "left_for_humans": ["Send the drafted reply and handle the club's choice."]
+    }
+  ]
+}

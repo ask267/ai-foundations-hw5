@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campus Customs — Resolved Board (Problem 9)</title>
+<style>
+  :root { --bg:#0b0b0d; --panel:#151518; --panel-2:#1d1d22; --line:#2c2c33; --text:#f4f1f4; --muted:#a59fa8; --pink:#ff4fa3; --pink-soft:#ff8cc6; --ok:#7ee2b8; --warn:#ffd27a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }
+  header { padding:32px 40px 24px; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#17101a 0%,var(--bg) 100%); }
+  h1 { margin:0; font-size:28px; } h1 span { color:var(--pink); }
+  header p { margin:8px 0 0; color:var(--muted); max-width:900px; }
+  .cash { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .cash div { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:10px 16px; font-family:"SF Mono",Menlo,monospace; font-size:13px; }
+  .cash b { color:var(--pink-soft); font-size:16px; }
+  nav { display:flex; gap:8px; margin-top:18px; }
+  nav a { color:var(--text); text-decoration:none; border:1px solid var(--line); border-radius:999px; padding:6px 14px; font-weight:600; font-size:13px; }
+  nav a:hover { border-color:var(--pink); color:var(--pink-soft); }
+  main { padding:24px 40px 60px; max-width:1240px; }
+  section { margin-bottom:44px; }
+  h2 { font-size:22px; margin:0 0 4px; } h2 .no { color:var(--pink); }
+  .sub { color:var(--muted); margin:0 0 14px; }
+  .tag { display:inline-block; font-size:12px; font-weight:700; padding:2px 10px; border-radius:999px; margin-left:8px; vertical-align:middle; }
+  .tag.ok { background:#7ee2b81f; color:var(--ok); border:1px solid #7ee2b855; }
+  figure { margin:0 0 18px; background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  figure img { display:block; width:100%; }
+  figcaption { padding:12px 16px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); }
+  figcaption b { color:var(--text); }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  code { font-family:"SF Mono",Menlo,monospace; font-size:12.5px; background:#24151e; color:var(--pink-soft); padding:1px 6px; border-radius:5px; }
+  @media (max-width:900px) { .pair { grid-template-columns:1fr; } header, main { padding-left:18px; padding-right:18px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Campus Customs <span>Night Desk</span>: resolved board</h1>
+  <p>Screenshots of the React board (<code>frontend/</code>, <code>npm run dev</code>) from the Problem 9 full run. The working database was reset first, then tickets 101, 102 and 103 were run from the board until each was resolved. Every payment was approved by a human (Archita) on the board. Details: <a href="desk_tickets.html" style="color:var(--pink-soft)">desk_tickets.html</a> (Actual + Cash tabs) and <code>resolved_tickets.json</code>.</p>
+  <div class="cash">
+    <div>start checking <b>$3,400.00</b></div>
+    <div>101 · invoice 501 <b>−$840.00</b></div>
+    <div>102 · rent lease 1 <b>−$2,400.00</b></div>
+    <div>103 · no payment <b>$0.00</b></div>
+    <div>end checking <b>$160.00</b> = <code>cash_accounts</code></div>
+  </div>
+  <nav><a href="#t101">#101</a><a href="#t102">#102</a><a href="#t103">#103</a></nav>
+</header>
+
+<main>
+  <section id="t101">
+    <h2><span class="no">#101</span> Bulldog tee, size S <span class="tag ok">resolved</span></h2>
+    <p class="sub">Customer order from Tauhid Zaman. Boss → Inventory → Accounting → CustomerService (Facilities not needed). It took three runs. The first set the ticket to <i>waiting</i>, with an $840 check to sign.</p>
+    <figure>
+      <img src="resolved_board_images/101_resolved.jpg" alt="Board with ticket 101 stamped resolved, checking $2,560.00">
+      <figcaption><b>Resolved.</b> Ticket 101 is stamped RESOLVED in the queue. The floor shows Inventory and Customer Service working this run, with Accounting and Facilities greyed out because they weren't needed again. Checking reads <b>$2,560.00</b>, and the receipt tape shows invoice #501 −$840.00 approved by Archita.</figcaption>
+    </figure>
+    <figure>
+      <img src="resolved_board_images/101_run1_waiting.jpg" alt="Board after ticket 101 run 1, status waiting, $840 check awaiting signature">
+      <figcaption><b>Before: run 1 of 101.</b> The Boss set the ticket to WAITING (dashed stamp). Accounting's request #1 ($840.00 to vendor invoice #501) waits in the signature tray, and checking is still $3,400.00 ("$840.00 awaiting your signature → $2,560.00 after"). After the human approval and a clarified Boss status rule, run 3 resolved the ticket.</figcaption>
+    </figure>
+  </section>
+
+  <section id="t102">
+    <h2><span class="no">#102</span> Rent due <span class="tag ok">resolved</span></h2>
+    <p class="sub">Rent notice from Elm City Properties. Boss → Facilities (verify) → Accounting (prepare). Inventory and Customer Service were benched. Resolved in one run.</p>
+    <figure>
+      <img src="resolved_board_images/102_after_approval.jpg" alt="Board with ticket 102 resolved and rent approved, checking $160.00">
+      <figcaption><b>Resolved and paid.</b> 101 and 102 are both stamped. Facilities and Accounting are the only specialists lit. After Archita signed request #2, checking dropped to <b>$160.00</b>, and the receipt tape shows rent lease #1 −$2,400.00 and invoice #501 −$840.00.</figcaption>
+    </figure>
+    <div class="pair">
+      <figure>
+        <img src="resolved_board_images/102_resolved_awaiting_signature.jpg" alt="Ticket 102 resolved with a $2,400 rent check waiting for signature">
+        <figcaption><b>Right after the run:</b> the $2,400.00 check for "Rent · lease #1" waits for a signature. Checking is $2,560.00, with $160.00 shown "after".</figcaption>
+      </figure>
+      <figure>
+        <img src="resolved_board_images/102_summary.jpg" alt="Ticket 102 live wire and what-happened summary">
+        <figcaption><b>Live wire and summary:</b> Accounting "preparing rent payment $2,400.00 for your signature", the Boss marking #102 resolved, and the Boss's verdict.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="t103">
+    <h2><span class="no">#103</span> Bulk hoodie discount <span class="tag ok">resolved</span></h2>
+    <p class="sub">Price override from Yale AI Club. Boss → Inventory → Accounting → CustomerService (which double-checked with Accounting). Facilities was benched. No money moved.</p>
+    <figure>
+      <img src="resolved_board_images/103_resolved.jpg" alt="Board with all three tickets resolved, checking $160.00">
+      <figcaption><b>All three resolved (3/3).</b> Checking stays at <b>$160.00</b> because 103 only produced a quote. The floor shows Accounting ×3 and Customer Service ×2: CustomerService wouldn't quote a discount until Accounting and the Boss confirmed it.</figcaption>
+    </figure>
+    <figure>
+      <img src="resolved_board_images/103_summary.jpg" alt="Ticket 103 summary with the drafted customer reply postcard">
+      <figcaption><b>What happened:</b> each agent's card with the tools it used, "Left for a human", and the drafted reply postcard offering the 8 size-M hoodies at $49.30 each (15% off).</figcaption>
+    </figure>
+  </section>
+</main>
+</body>
+</html>

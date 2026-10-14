@@ -1,0 +1,21 @@
+# Secrets: never commit real keys
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node / Vite
+node_modules/
+frontend/dist/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Audit-file backups the writer makes if the trail is ever unreadable
+output/audit_trail.unreadable-*.json

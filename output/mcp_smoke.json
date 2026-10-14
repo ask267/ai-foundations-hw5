@@ -1,0 +1,160 @@
+{
+  "server": "campus-customs",
+  "config": ".mcp.json (project root: AI Foundations/.mcp.json)",
+  "database": "data/campus_customs_new.db",
+  "transport": "stdio",
+  "run_at": "2026-10-12T03:15:47+00:00",
+  "tools_listed_by_server": [
+    "check_stock",
+    "get_rent_due",
+    "get_pricing"
+  ],
+  "tests": [
+    {
+      "ticket": 101,
+      "prompt": "Ticket 101: Tauhid Zaman wants 1 Classic Bulldog Tee (CC-TEE-WHITE) in size S. Use the campus-customs MCP to check if we can fill it.",
+      "tool": "check_stock",
+      "arguments": {
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "qty_needed": 1
+      },
+      "tool_output": {
+        "found": true,
+        "sku": "CC-TEE-WHITE",
+        "name": "Classic Bulldog Tee",
+        "size": "S",
+        "location": "Aisle B",
+        "qty_on_hand": 0,
+        "qty_needed": 1,
+        "can_fill": false,
+        "shortfall": 1,
+        "other_sizes": [
+          {
+            "size": "L",
+            "qty": 3
+          },
+          {
+            "size": "M",
+            "qty": 5
+          },
+          {
+            "size": "XL",
+            "qty": 2
+          }
+        ]
+      },
+      "db_verification": {
+        "database": "data/campus_customs_new.db",
+        "query": "SELECT sku, name, size, qty, location FROM inventory WHERE sku = 'CC-TEE-WHITE'",
+        "rows": [
+          {
+            "sku": "CC-TEE-WHITE",
+            "name": "Classic Bulldog Tee",
+            "size": "L",
+            "qty": 3,
+            "location": "Aisle B"
+          },
+          {
+            "sku": "CC-TEE-WHITE",
+            "name": "Classic Bulldog Tee",
+            "size": "M",
+            "qty": 5,
+            "location": "Aisle B"
+          },
+          {
+            "sku": "CC-TEE-WHITE",
+            "name": "Classic Bulldog Tee",
+            "size": "S",
+            "qty": 0,
+            "location": "Aisle B"
+          },
+          {
+            "sku": "CC-TEE-WHITE",
+            "name": "Classic Bulldog Tee",
+            "size": "XL",
+            "qty": 2,
+            "location": "Aisle B"
+          }
+        ],
+        "matches_tool_output": true
+      }
+    },
+    {
+      "ticket": 102,
+      "prompt": "Ticket 102: Elm City Properties emailed that rent is due in 2 days. Use the campus-customs MCP to look up lease 1 and confirm the amount, due date, and our checking balance.",
+      "tool": "get_rent_due",
+      "arguments": {
+        "lease_id": 1
+      },
+      "tool_output": {
+        "found": true,
+        "lease": {
+          "id": 1,
+          "space_name": "Chapel Street shop",
+          "landlord": "Elm City Properties",
+          "monthly_rent": 2400.0,
+          "next_due": "2026-09-02",
+          "notes": null
+        },
+        "desk_date_today": "2026-08-31",
+        "days_until_due": 2,
+        "cash_accounts": [
+          {
+            "name": "checking",
+            "balance": 3400.0,
+            "date": "2026-08-31"
+          }
+        ]
+      },
+      "db_verification": {
+        "database": "data/campus_customs_new.db",
+        "query": "SELECT l.landlord, l.monthly_rent, l.next_due, d.date_today, c.name AS account, c.balance FROM leases l, desk d, cash_accounts c WHERE l.id = 1",
+        "rows": [
+          {
+            "landlord": "Elm City Properties",
+            "monthly_rent": 2400.0,
+            "next_due": "2026-09-02",
+            "date_today": "2026-08-31",
+            "account": "checking",
+            "balance": 3400.0
+          }
+        ],
+        "matches_tool_output": true
+      }
+    },
+    {
+      "ticket": 103,
+      "prompt": "Ticket 103: Yale AI Club wants 20 Basic Hoodie Big Yale (CC-HOOD-NAVY) and is asking for a bulk discount. Use the campus-customs MCP to get the real cost and list price for 20 units.",
+      "tool": "get_pricing",
+      "arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20
+      },
+      "tool_output": {
+        "found": true,
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20,
+        "unit_cost": 22.0,
+        "list_price": 58.0,
+        "unit_margin": 36.0,
+        "total_at_list": 1160.0,
+        "total_at_cost": 440.0,
+        "max_discount_pct_before_loss": 62.1
+      },
+      "db_verification": {
+        "database": "data/campus_customs_new.db",
+        "query": "SELECT sku, unit_cost, list_price FROM pricing WHERE sku = 'CC-HOOD-NAVY'",
+        "rows": [
+          {
+            "sku": "CC-HOOD-NAVY",
+            "unit_cost": 22.0,
+            "list_price": 58.0
+          }
+        ],
+        "matches_tool_output": true
+      }
+    }
+  ],
+  "all_match_database": true
+}
